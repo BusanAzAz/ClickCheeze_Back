@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .module.colorchart import getChart
 from .module.http import ok
+from .module.character_recomend import getBackColor
 
 import os
 import subprocess
@@ -44,5 +45,12 @@ def rtnColorChart(result):
     result = {
         "tone" : tone,
         "personal_color" : colorChart
-        }
+    }
     return result
+
+@api_view(['GET'])
+def get(request, category):
+    if request.method == 'GET':
+        res = getBackColor(category)
+        return Response(ok("카테고리 로드 성공", res), status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)

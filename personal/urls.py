@@ -18,5 +18,6 @@ from django.urls import path
 from personal import views
 
 urlpatterns = [
-    path('image', views.post)
+    path('image', views.post),
+    path('category/<str:category>', views.get)
 ]
