@@ -40,8 +40,7 @@ class DetectFace:
         # convert the landmark (x, y)-coordinates to a NumPy array
         shape = self.predictor(cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY), rect)
         shape = face_utils.shape_to_np(shape)
-
-        # print(len(face_parts))
+        
         idx = 0
         # loop over the face parts individually
         for (name, (i, j)) in face_utils.FACIAL_LANDMARKS_IDXS.items():

@@ -1,4 +1,3 @@
-from .models import Image
 from .serializers import ImageSerializer
 
 from rest_framework.decorators import api_view
@@ -14,8 +13,10 @@ import subprocess
 @api_view(['POST'])
 def post(request):
     if request.method == 'POST':
-        serializer = ImageSerializer (data=request.data)
+        serializer = ImageSerializer(data=request.FILES)
+        print(serializer.is_valid())
         if serializer.is_valid(raise_exception = True):
+            print('이거까진 됨')
             serializer.save()
             # 현재 디렉토리 저장
             original_dir = os.getcwd()
@@ -23,8 +24,10 @@ def post(request):
             os.chdir("color/src")
             try:
                 # 스크립트 실행
+                print(serializer.data['image'])
                 res = subprocess.check_output("python main.py --image ../.." + serializer.data['image'], shell=True)
             except subprocess.CalledProcessError as e:
+                print(e)
                 return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             finally:
                 # 원래의 디렉토리로 돌아가기
@@ -38,5 +41,8 @@ def rtnColorChart(result):
 
     colorChart = getChart(tone)
 
-    result = {"personal_color": colorChart}
+    result = {
+        "tone" : tone,
+        "personal_color" : colorChart
+        }
     return result
